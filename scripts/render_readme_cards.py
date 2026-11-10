@@ -359,11 +359,11 @@ def heatmap(data):
         )
     ncols = (len(days) + lead + 6) // 7
     right = gx + ncols * step - 3
+    legend_x = right - 115
     labels = "".join(
         f'<text x="{gx + col * step}" y="{gy + 7 * step + 16}" font-family="{MONO}" font-size="11" fill="{MUTED}">{m}</text>'
-        for col, m in months if col < ncols - 13
+        for col, m in months if gx + col * step < legend_x - 68
     )
-    legend_x = right - len(BLUE) * 14 - 34
     legend = "".join(
         f'<rect x="{legend_x + i * 14}" y="{gy + 7 * step + 6}" width="11" height="11" rx="2.5" fill="{c}"/>'
         for i, c in enumerate(BLUE)
@@ -377,7 +377,7 @@ def heatmap(data):
 <g class="f" {d(2.4)}>{labels}
 <text x="{legend_x - 8}" y="{gy + 7 * step + 16}" text-anchor="end" font-family="{MONO}" font-size="11" fill="{MUTED}">less</text>
 {legend}
-<text x="{legend_x + len(BLUE) * 14 + 2}" y="{gy + 7 * step + 16}" text-anchor="end" font-family="{MONO}" font-size="11" fill="{MUTED}">more</text></g>
+<text x="{right}" y="{gy + 7 * step + 16}" text-anchor="end" font-family="{MONO}" font-size="11" fill="{MUTED}">more</text></g>
 """
     write("heatmap.svg", svg(W, h, body, ["serif", "serif-i", "mono"],
                              f'Contribution graph: {data["total_contributions"]:,} contributions in the last year'))
