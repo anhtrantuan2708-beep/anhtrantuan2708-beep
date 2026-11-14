@@ -299,7 +299,7 @@ def activity(data):
 # ---- 4 · repo cards -----------------------------------------------------------
 REPO_W, REPO_H = 880 / 3 - 8, 176
 REPOS = [
-    ("bubble-chat-releases", "Bubbo — Native macOS floating chat utility unifying 7 messaging networks locally.", "Swift · macOS Alpha", TECH),
+    ("bubble-chat-releases", "Bubbo — Native macOS floating chat utility unifying 6 messaging networks locally.", "Swift · macOS Alpha", TECH),
     ("shopee-ai-room-demo", "Interactive room restyling & shopping concept with 2D mood map & subset cart.", "Mobile UX · Demo", STUDIO),
     ("northline", "Responsive freight landing page with cargo storytelling & 3D route globe.", "Web · GSAP 60fps", LEARN),
 ]
