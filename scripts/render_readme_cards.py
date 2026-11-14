@@ -21,7 +21,7 @@ ROOT = os.path.join(HERE, "..")
 DATA = os.path.join(ROOT, "data", "contributions.json")
 OUT = os.path.join(ROOT, "cards")
 FONTS = os.path.join(ROOT, "fonts")
-PORTRAIT = os.path.join(ROOT, "bryan-ascii.svg")
+PORTRAIT = os.path.join(ROOT, "assets", "bryan-sticker.png")
 
 # ---- brand tokens -----------------------------------------------------------
 PAPER = "#f3f3f1"
@@ -141,16 +141,9 @@ def text_lines(x, y, lines, lh, attrs):
 # ---- 1 · hero -----------------------------------------------------------------
 def hero():
     h = 420
-    src = open(PORTRAIT).read()
-    rows = re.findall(r'<text xml:space="preserve"[^>]*\by="([\d.]+)"[^>]*>(.*?)</text>', src, re.S)
-    portrait = []
-    for i, (y, txt) in enumerate(rows):
-        portrait.append(
-            f'<text class="f" style="animation-delay:{0.25 + i * 0.018:.3f}s;animation-duration:.35s" '
-            f'xml:space="preserve" x="20" y="{y}" fill="{INK}" font-size="7.2" '
-            f'textLength="800" lengthAdjust="spacing">{txt}</text>'
-        )
-    s = 0.41
+    sticker_b64 = base64.b64encode(open(PORTRAIT, "rb").read()).decode()
+    disp_w, disp_h = 330, 368
+    disp_x, disp_y = W - disp_w - 28, (h - disp_h) // 2 + 2
     body = f"""
 <defs>
   <linearGradient id="shine" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="600" y2="0">
@@ -160,6 +153,10 @@ def hero():
     <animateTransform attributeName="gradientTransform" type="translate" values="-600 0;600 0;600 0"
       keyTimes="0;.45;1" dur="7s" begin="1.6s" repeatCount="indefinite"/>
   </linearGradient>
+  <filter id="stickerShadow" x="-15%" y="-12%" width="130%" height="130%">
+    <feDropShadow dx="0" dy="8" stdDeviation="9" flood-color="#0b1528" flood-opacity="0.11"/>
+    <feDropShadow dx="0" dy="2" stdDeviation="2.5" flood-color="#0b1528" flood-opacity="0.06"/>
+  </filter>
 </defs>
 <rect width="{W}" height="{h}" rx="14" fill="{PAPER}"/>
 <g class="f" {d(0)}>
@@ -175,8 +172,8 @@ def hero():
   <text x="48" y="394" font-family="{MONO}" font-size="13" fill="{INK}">portfolio-bryan-2708.framer.website</text>
   <text class="nu" x="328" y="394" font-family="{MONO}" font-size="13" fill="{TECH}">&#8599;</text>
 </g>
-<g transform="translate(520 36) scale({s}) translate(-20 -37)" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
-  {''.join(portrait)}
+<g class="ti" {d(0.35)} filter="url(#stickerShadow)">
+  <image href="data:image/png;base64,{sticker_b64}" x="{disp_x}" y="{disp_y}" width="{disp_w}" height="{disp_h}"/>
 </g>
 """
     write("hero.svg", svg(W, h, body, ["serif", "serif-i", "sans", "mono"],
